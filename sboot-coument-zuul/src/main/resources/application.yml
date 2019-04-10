@@ -1,0 +1,78 @@
+# zuul 消费者服务yum配置文件
+spring:
+  application:
+    name: zuul
+server:
+  port: 8087
+
+#zuul 反向代理
+zuul:
+  routes:
+    coument-user:
+      path: /cust/**
+      serviceId: sboot-coument-user
+    sboot-provider-user: /u-service/**
+
+#eureka 服务注册中心配置
+#---------------Eureka client 配置 s---------------
+eureka:
+  client:
+    #该客户端是否可用
+    enabled: true
+    #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true
+    register-with-eureka: true
+    #此客户端是否获取eureka服务器注册表上的注册信息，默认为true
+    fetch-registry: true
+    #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registry-fetch-interval-seconds: 10
+    #实例是否使用同一zone里的eureka服务器，默认为true，理想状态下，eureka客户端与服务端是在同一zone下
+    prefer-same-zone-eureka: true
+    #client在shutdown的时候是否显示的注销服务从服务中心，默认为true
+    should-unregister-on-shutdown: true
+    # 开启eureka 客户端 健康检查 （注:必须导入 spring-boot-starter-actuator 才能加载客户端健康检查）
+    healthcheck:
+      enabled: true
+    #与Eureka注册服务中心的通信zone和url地址
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  #---------------Eureka client 配置 e---------------
+
+  #---------------Eureka instance 配置项 s---------------
+  instance:
+    #服务注册中心实例的主机名
+    hostname: localhost
+    #该实例注册到服务中心的唯一ID
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    #该实例的IP地址
+    ip-address: ${spring.cloud.client.ip-address}
+    #该实例，相较于hostname是否优先使用IP
+    prefer-ip-address: true
+    #服务中心删除此服务实例的等待时间(秒为单位),时间间隔为最后一次服务中心接受到的心跳时间
+    #该配置指示eureka服务器在接收到最后一个心跳之后等待的时间，然后才能从列表中删除此实例 (Spring Cloud默认该配置是 90s)
+    lease-expiration-duration-in-seconds: 5
+    #该实例给服务中心发送心跳的间隔时间，用于表明该服务实例可用
+    #该配置指示eureka客户端需要向eureka服务器发送心跳的频率  (Spring Cloud默认该配置是 30s)
+    lease-renewal-interval-in-seconds: 3
+    #该实例，注册服务中心，默认打开的通信数量
+    registry.default-open-for-traffic-count: 1
+    #每分钟续约次数
+    registry.expected-number-of-renews-per-min: 1
+#---------------Eureka instance 配置项 e---------------
+
+# springboot的Actuator提供了运行状态监控的功能，可以通过REST、远程Shell和JMX方式来查看。注：必须开启断路器（hystrix）
+# 这个配置非常重要，否则会导致/actuator/hystrix.stream无法访问,hystrix.stream节点会持续提供熔断状态
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: ["info","health","hystrix.stream"]
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+
+#日志
+logging:
+  level:
+    root: info
+    com.log: DEBUG
