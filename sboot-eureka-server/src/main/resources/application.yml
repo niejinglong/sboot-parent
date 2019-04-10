@@ -1,0 +1,93 @@
+#eureka 启动器配置
+spring:
+  application:
+    name: eureka-server # 访问服务名称
+  #profiles:
+    #active: pro1
+server:
+  port: 8761
+#eureka 服务端配置
+eureka:
+  #指定环境配置
+  environment: dev
+  #指定数据中心配置
+  datacenter: Eureka-Server-Cloud
+  #---------------Eureka Server 配置 s---------------
+  server:
+    #服务端开启自我保护模式。无论什么情况，服务端都会保持一定数量的服务。
+    #避免client与server的网络问题，而出现大量的服务被清除。
+    #该配置false可以移除这种自我保护机制，防止失效的服务也被一直访问(Spring Cloud默认该配置是 true)
+    enable-self-preservation: true
+    #开启清除无效服务的定时任务，时间间隔。默认1分钟
+    #该配置可以修改检查失效服务的时间，每隔1s检查失效服务，并移除列表 (Spring Cloud默认该配置是 60s)
+    eviction-interval-timer-in-ms: 1000
+    #间隔多长时间，清除过期的delta数据 （注：必须设置时间 设0 会报参数设置不正确）
+    delta-retention-timer-interval-in-ms: 1000
+    #过期数据，是否也提供给client
+    disable-delta: false
+    #eureka服务端是否记录client的身份header
+    log-identity-headers: true
+    #是否开启请求频率限制器
+    rate-limiter-enabled: false
+    #请求频率限制器
+    #rate-limiter-burst-size: 10
+    #请求频率的平均值
+    #rate-limiter-full-fetch-average-rate: 100
+    #是否对标准的client进行频率请求限制。如果是false，则只对非标准client进行限制
+    #rate-limiter-throttle-standard-clients: false
+    #注册服务、拉取服务列表数据的请求频率的平均值
+    rate-limiter-registry-fetch-average-rate: 500
+    #设置信任的client list
+    #rate-limiter-privileged-clients:
+    #在设置的时间范围类，期望与client续约的百分比。
+    #renewal-percent-threshold: 0.85
+    #多长时间更新续约的阈值
+    #renewal-threshold-update-interval-ms: 0
+    #对于缓存的注册数据，多长时间过期
+    response-cache-auto-expiration-in-seconds: 100
+    #多长时间更新一次缓存中的服务注册数据 （注：必须设置时长 设置 0时会报参数设置不正确）
+    response-cache-update-interval-ms: 1000
+    #缓存增量数据的时间，以便在检索的时候不丢失信息
+    retention-time-in-m-s-in-delta-queue: 0
+    #当时间戳不一致的时候，是否进行同步
+    sync-when-timestamp-differs: true
+    #是否采用只读缓存策略，只读策略对于缓存的数据不会过期。
+    use-read-only-response-cache: true
+
+#---------------Eureka Server 配置 s---------------
+
+#---------------Eureka client 配置 s---------------
+  client:
+      #该客户端是否可用
+      enabled: true
+      #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true
+      register-with-eureka: false
+      #此客户端是否获取eureka服务器注册表上的注册信息，默认为true
+      fetch-registry: false
+      #是否过滤掉，非UP的实例。默认为true
+      filter-only-up-instances: false
+      #与Eureka注册服务中心的通信zone和url地址
+      service-url:
+        defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+#---------------Eureka client 配置 e---------------
+
+#---------------Eureka instance 配置项 s---------------
+  instance:
+    #服务注册中心实例的主机名
+    hostname: localhost
+    #注册在Eureka服务中的应用组名
+    #app-group-name: eurekaServer
+    #注册在的Eureka服务中的应用名称
+    #appname: eureka-server
+    #该实例注册到服务中心的唯一ID
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    #该实例的IP地址
+    ip-address: ${spring.cloud.client.ip-address}
+    #该实例，相较于hostname是否优先使用IP
+    prefer-ip-address: true
+
+#---------------Eureka instance 配置项 e---------------
+logging:
+  level:
+    root: info
+    com.sbooteurekaserver.sbooteurekaserver.sbootLog: DEBUG

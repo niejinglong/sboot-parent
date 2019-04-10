@@ -1,0 +1,102 @@
+# turbine Server yml服务配置
+server:
+  port: 8084
+
+spring:
+  application:
+    name: turbine-Server
+
+#turbine 服务集群监控配置
+turbine:
+
+  aggregator:
+    #clusterConfig: ZUUL,SBOOT-PROVIDER-USER
+    #clusterConfig: default
+  appConfig: zuul,sboot-coument-user,sboot-provider-user
+  clusterNameExpression: "'default'"
+
+#eureka 服务注册中心配置
+eureka:
+  #---------------Eureka client 配置 s---------------
+  client:
+    #该客户端是否可用
+    enabled: true
+    #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true
+    register-with-eureka: true
+    #此客户端是否获取eureka服务器注册表上的注册信息，默认为true
+    fetch-registry: true
+    #client连接Eureka服务端后的空闲等待时间，默认为30 秒
+    #eureka-connection-idle-timeout-seconds: 30
+    #client连接eureka服务端的连接超时时间，默认为5秒
+    #eureka-server-connect-timeout-seconds: 5
+    #client对服务端的读超时时长
+    #eureka-server-read-timeout-seconds: 8
+    #client连接all eureka服务端的总连接数，默认200
+    #eureka-server-total-connections: 200
+    #client连接eureka服务端的单机连接数量，默认50
+    #eureka-server-total-connections-per-host: 50
+    #执行程序指数回退刷新的相关属性，是重试延迟的最大倍数值，默认为10
+    #cache-refresh-executor-exponential-back-off-bound: 10
+    #执行程序缓存刷新线程池的大小，默认为5
+    #cache-refresh-executor-thread-pool-size: 2
+    #心跳执行程序回退相关的属性，是重试延迟的最大倍数值，默认为10
+    #heartbeat-executor-exponential-back-off-bound: 10
+    #心跳执行程序线程池的大小,默认为5
+    #heartbeat-executor-thread-pool-size: 5
+    # 询问Eureka服务url信息变化的频率（s），默认为300秒
+    #eureka-service-url-poll-interval-seconds: 30
+    #最初复制实例信息到eureka服务器所需的时间（s），默认为40秒
+    #initial-instance-info-replication-interval-seconds: 40
+    #间隔多长时间再次复制实例信息到eureka服务器，默认为30秒
+    #instance-info-replication-interval-seconds: 30
+    #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    #registry-fetch-interval-seconds: 30
+    # 获取实例所在的地区。默认为us-east-1
+    #region: us-east-1
+    #实例是否使用同一zone里的eureka服务器，默认为true，理想状态下，eureka客户端与服务端是在同一zone下
+    prefer-same-zone-eureka: true
+    # 获取实例所在的地区下可用性的区域列表，用逗号隔开。（AWS）
+    #availability-zones.china:
+    #增量信息是否可以提供给客户端看，默认为false
+    #disable-delta: false
+    #是否记录eureka服务器和客户端之间在注册表的信息方面的差异，默认为false
+    #log-delta-diff: false
+    # 如果设置为true,客户端的状态更新将会点播更新到远程服务器上，默认为true
+    #on-demand-update-status-change: true
+    #client是否在初始化阶段强行注册到服务中心，默认为false
+    #should-enforce-registration-at-init: false
+    #client在shutdown的时候是否显示的注销服务从服务中心，默认为true
+    should-unregister-on-shutdown: true
+    # 开启eureka 客户端 健康检查 （注:必须导入 spring-boot-starter-actuator 才能加载客户端健康检查）
+    healthcheck:
+      enabled: true
+    #与Eureka注册服务中心的通信zone和url地址
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  #---------------Eureka client 配置 e---------------
+
+  #---------------Eureka instance 配置项 s---------------
+  instance:
+    #服务注册中心实例的主机名
+    hostname: localhost
+    #注册在Eureka服务中的应用组名
+    app-group-name: turbine-Server1
+    #注册在的Eureka服务中的应用名称
+    appname: turbine-Server
+    #该实例注册到服务中心的唯一ID
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    #该实例的IP地址
+    ip-address: ${spring.cloud.client.ip-address}
+    #该实例，相较于hostname是否优先使用IP
+    prefer-ip-address: true
+    #服务中心删除此服务实例的等待时间(秒为单位),时间间隔为最后一次服务中心接受到的心跳时间
+    #该配置指示eureka服务器在接收到最后一个心跳之后等待的时间，然后才能从列表中删除此实例 (Spring Cloud默认该配置是 90s)
+    lease-expiration-duration-in-seconds: 30
+    #该实例给服务中心发送心跳的间隔时间，用于表明该服务实例可用
+    #该配置指示eureka客户端需要向eureka服务器发送心跳的频率  (Spring Cloud默认该配置是 30s)
+    lease-renewal-interval-in-seconds: 10
+    #该实例，注册服务中心，默认打开的通信数量
+    registry.default-open-for-traffic-count: 30
+    #每分钟续约次数
+    registry.expected-number-of-renews-per-min: 10
+  #---------------Eureka instance 配置项 e---------------
