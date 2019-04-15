@@ -11,8 +11,7 @@ zuul:
     coument-user:
       path: /cust/**
       serviceId: sboot-coument-user
-    sboot-provider-user: /u-service/**
-
+    sboot-provider-user: /usc/**
 #eureka 服务注册中心配置
 #---------------Eureka client 配置 s---------------
 eureka:
