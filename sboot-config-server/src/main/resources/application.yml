@@ -1,0 +1,16 @@
+# configServer yml服务配置
+#server 配置
+server:
+  port: 8080
+  servlet:
+    context-path: /cs
+spring:
+  application:
+    #应用名
+    name: configServer
+  #springcloud config Sever 配置
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/niejinglong/sboot-parent-configServer
