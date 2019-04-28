@@ -28,8 +28,6 @@
         <module>sboot-eureka-server</module>
         <module>sboot-turbine-server</module>
         <module>sboot-hystrix-dashboard</module>
-        <module>sboot-config-server</module>
-        <module>sboot-config-client</module>
     </modules>
 
     <dependencies>
@@ -105,16 +103,16 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
-        <!--使用 spring-config-server 集中管理配置-->
+        <!--使用 spring-config-server 集中管理配置
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>
-        <!--使用 spring-config-client 集中管理配置-->
+        </dependency>-->
+        <!--使用 spring-config-client 集中管理配置
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <dependencyManagement>

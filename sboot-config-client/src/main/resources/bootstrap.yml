@@ -1,9 +1,0 @@
-#调用服务端配置
-spring:
-  cloud:
-    config:
-      uri: http://localhost:8080/cs/
-      profile: dev
-      label: master
-  application:
-    name: ser
